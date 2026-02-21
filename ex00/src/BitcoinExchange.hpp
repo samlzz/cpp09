@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 07:13:21 by sliziard          #+#    #+#             */
-/*   Updated: 2026/02/21 21:56:14 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/02/21 22:08:35 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,12 +51,16 @@ public:
 								std::ostream &os = std::cout) const;
 
 private:
-	static bool	isValidDate(const std::string &date);
-	static bool	isValidValue(const std::string &value, double &out);
 	double		getRateForDate(const std::string &date) const;
 
 	static std::pair<std::string, double>
-				parseSingleLine(const std::string &line, const std::string &sep);
+				parseSingleLine(const std::string &line,
+								const std::string &sep,
+								bool checkMax = true);
+
+	static bool	isValidDate(const std::string &date);
+	static bool	isValidValue(const std::string &value,
+								double &out, bool checkMax);
 
 	// ? Forbidden
 	BitcoinExchange(const BitcoinExchange &other);

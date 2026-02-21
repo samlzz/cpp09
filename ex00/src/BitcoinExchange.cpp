@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 08:14:18 by sliziard          #+#    #+#             */
-/*   Updated: 2026/02/21 21:57:24 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/02/21 22:07:32 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void	BitcoinExchange::loadDatabase(const std::string &dbPath)
 
 	while (std::getline(dbFile, line))
 	{
-		std::pair<std::string, double> entry = parseSingleLine(line, ",");
+		std::pair<std::string, double> entry = parseSingleLine(line, ",", false);
 
 		_db[entry.first] = entry.second;
 	}
@@ -148,6 +148,31 @@ double	BitcoinExchange::getRateForDate(const std::string &date) const
 	return it->second;
 }
 
+// ---- Parsing ----
+
+std::pair<std::string, double>
+BitcoinExchange::parseSingleLine(const std::string &line,
+								const std::string &sep,
+								bool checkMax)
+{
+	size_t	sepPos = line.find(sep);
+	if (sepPos == std::string::npos)
+		throw BadInputException(line);
+
+	std::string	date = _trim(line.substr(0, sepPos));
+	std::string	valueStr = _trim(line.substr(sepPos + sep.length()));
+
+	double value;
+
+	if (!isValidDate(date))
+		throw BadInputException(line);
+
+	if (!isValidValue(valueStr, value, checkMax))
+		throw BadInputException(line);
+
+	return std::make_pair(date, value);
+}
+
 // ---- Validators ----
 
 bool	BitcoinExchange::isValidDate(const std::string &date)
@@ -176,7 +201,7 @@ bool	BitcoinExchange::isValidDate(const std::string &date)
 	return true;
 }
 
-bool	BitcoinExchange::isValidValue(const std::string &value, double &out)
+bool	BitcoinExchange::isValidValue(const std::string &value, double &out, bool checkMax)
 {
 	char	*endptr = NULL;
 	double	val = std::strtod(value.c_str(), &endptr);
@@ -186,34 +211,11 @@ bool	BitcoinExchange::isValidValue(const std::string &value, double &out)
 
 	if (val < BE_MIN_RATE_VALUE)
 		throw NegativeValueException();
-	if (val > BE_MAX_RATE_VALUE)
+	if (checkMax && val > BE_MAX_RATE_VALUE)
 		throw TooLargeValueException();
 
 	out = val;
 	return true;
-}
-
-// ---- Parsing ----
-
-std::pair<std::string, double>
-BitcoinExchange::parseSingleLine(const std::string &line, const std::string &sep)
-{
-	size_t	sepPos = line.find(sep);
-	if (sepPos == std::string::npos)
-		throw BadInputException(line);
-
-	std::string	date = _trim(line.substr(0, sepPos));
-	std::string	valueStr = _trim(line.substr(sepPos + sep.length()));
-
-	double value;
-
-	if (!isValidDate(date))
-		throw BadInputException(line);
-
-	if (!isValidValue(valueStr, value))
-		throw BadInputException(line);
-
-	return std::make_pair(date, value);
 }
 
 // ========================================================================

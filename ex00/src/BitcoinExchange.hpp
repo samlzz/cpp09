@@ -6,28 +6,27 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 07:13:21 by sliziard          #+#    #+#             */
-/*   Updated: 2026/02/16 20:03:43 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/02/21 21:56:14 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __BITCOIN_EXCHANGE_HPP__
 # define __BITCOIN_EXCHANGE_HPP__
 
-#include <exception>
-#include <istream>
-#include <utility>
+# include <exception>
+# include <utility>
+# include <iostream>
+# include <map>
+# include <ostream>
+# include <stdexcept>
+# include <string>
+
 # ifndef BE_MIN_RATE_VALUE
 #  define BE_MIN_RATE_VALUE		0
 # endif
 # ifndef BE_MAX_RATE_VALUE
 #  define BE_MAX_RATE_VALUE		1000
 # endif
-
-# include <iostream>
-# include <map>
-# include <ostream>
-# include <stdexcept>
-# include <string>
 
 class BitcoinExchange {
 
@@ -56,8 +55,6 @@ private:
 	static bool	isValidValue(const std::string &value, double &out);
 	double		getRateForDate(const std::string &date) const;
 
-	static std::map<std::string, double>
-				parseDateValue(std::istream &in, const std::string &sep);
 	static std::pair<std::string, double>
 				parseSingleLine(const std::string &line, const std::string &sep);
 

@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/16 08:14:18 by sliziard          #+#    #+#             */
-/*   Updated: 2026/02/21 21:39:52 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/02/21 21:57:24 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,11 @@
 
 #include <cctype>
 #include <cstddef>
+#include <cstdlib>
 #include <fstream>
-#include <istream>
 #include <map>
 #include <string>
+#include <stdint.h>
 
 // ============================================================================
 // Static Helpers
@@ -41,12 +42,11 @@ static inline std::string	_trim(const std::string& s)
 	return _extract(s, std::isspace);
 }
 
-static inline std::ifstream	_openFile(const std::string &path)
+static inline void _openFile(std::ifstream &file, const std::string &path)
 {
-	std::ifstream file(path.c_str());
+	file.open(path.c_str());
 	if (!file.is_open())
 		throw BitcoinExchange::FileOpenException();
-	return file;
 }
 
 // ============================================================================
@@ -86,15 +86,26 @@ BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange &other)
 
 void	BitcoinExchange::loadDatabase(const std::string &dbPath)
 {
-	std::ifstream	dbFile = _openFile(dbPath);
-	_db = parseDateValue(dbFile, ",");
+	std::ifstream					dbFile;
+	std::string						line;
+
+	_openFile(dbFile, dbPath);
+	std::getline(dbFile, line);
+
+	while (std::getline(dbFile, line))
+	{
+		std::pair<std::string, double> entry = parseSingleLine(line, ",");
+
+		_db[entry.first] = entry.second;
+	}
 }
 
 void	BitcoinExchange::processInput(const std::string &path, std::ostream &os) const
 {
-	std::ifstream	file = _openFile(path);
+	std::ifstream	file;
 	std::string		line;
 
+	_openFile(file, path);
 	std::getline(file, line);
 
 	while (std::getline(file, line))
@@ -182,7 +193,7 @@ bool	BitcoinExchange::isValidValue(const std::string &value, double &out)
 	return true;
 }
 
-// ---- Parsers ----
+// ---- Parsing ----
 
 std::pair<std::string, double>
 BitcoinExchange::parseSingleLine(const std::string &line, const std::string &sep)
@@ -203,22 +214,6 @@ BitcoinExchange::parseSingleLine(const std::string &line, const std::string &sep
 		throw BadInputException(line);
 
 	return std::make_pair(date, value);
-}
-
-std::map<std::string, double>	BitcoinExchange::parseDateValue(std::istream &in, const std::string &sep)
-{
-	std::map<std::string, double>	data;
-	std::string						line;
-
-	std::getline(in, line);
-
-	while (std::getline(in, line))
-	{
-		std::pair<std::string, double> entry = parseSingleLine(line, sep);
-
-		data[entry.first] = entry.second;
-	}
-	return data;
 }
 
 // ========================================================================

@@ -94,7 +94,7 @@ endif
 
 OUT := $(if $(BIN_DIR),$(BIN_DIR),./)$(NAME)
 
-export VERBOSE    := false
+export VERBOSE    ?= false
 export P := @
 ifeq ($(VERBOSE),true)
 	P :=

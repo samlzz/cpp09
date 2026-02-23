@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:26:00 by sliziard          #+#    #+#             */
-/*   Updated: 2026/02/23 18:10:18 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/02/23 18:22:42 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <stdint.h>
 # include <string>
 
+# define RPN_OP_COUNT	4
+
 class RPN {
 
 private:
@@ -32,7 +34,7 @@ private:
 	};
 
 	std::stack<int32_t, std::list<int32_t> >	_lifo;
-	static const Operation						_ops[4];
+	static const Operation						_ops[RPN_OP_COUNT];
 
 public:
 

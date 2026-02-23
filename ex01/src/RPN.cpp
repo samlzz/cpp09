@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:15:35 by sliziard          #+#    #+#             */
-/*   Updated: 2026/02/23 18:10:06 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/02/23 18:24:26 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 // Construction / Destruction
 // ============================================================================
 
-const RPN::Operation RPN::_ops[4] =
+const RPN::Operation RPN::_ops[RPN_OP_COUNT] =
 {
 	{'+', &RPN::add},
 	{'-', &RPN::sub},
@@ -69,19 +69,23 @@ int32_t	RPN::evaluate(const std::string &expr)
 	OpFunc	op;
 	int32_t	a;
 	int32_t	b;
+	uint8_t	c;
 
 	clear();
 	for (size_t i = 0; i < expr.size(); ++i)
 	{
-		if (std::isdigit(expr[i]))
+		c = static_cast<uint8_t>(expr[i]);
+		if (std::isdigit(c))
 		{
-			if (i + 1 < expr.size() && std::isdigit(expr[i + 1]))
+			if (i + 1 < expr.size()
+				&& std::isdigit(static_cast<uint8_t>(expr[i + 1]))
+			)
 				throw InvalidExpression("numbers must be single digits (0-9)");
 
 			_lifo.push(expr[i] - '0');
 			continue;
 		}
-		if (std::isspace(expr[i]))
+		if (std::isspace(c))
 			continue;
 
 		op = getOp(expr[i]);
@@ -111,7 +115,7 @@ void	RPN::clear(void)
 
 RPN::OpFunc	RPN::getOp(char symbol)
 {
-	for (size_t i = 0; i < sizeof(_ops) / sizeof(_ops[0]); ++i)
+	for (size_t i = 0; i < RPN_OP_COUNT; ++i)
 	{
 		if (_ops[i].symbol == symbol)
 			return _ops[i].func;

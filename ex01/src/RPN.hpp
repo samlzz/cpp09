@@ -6,14 +6,13 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 15:26:00 by sliziard          #+#    #+#             */
-/*   Updated: 2026/02/23 18:22:42 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/02/23 18:35:56 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __RPN_HPP__
 # define __RPN_HPP__
 
-# include <cstdint>
 # include <list>
 # include <stack>
 # include <stdexcept>

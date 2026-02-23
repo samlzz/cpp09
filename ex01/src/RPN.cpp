@@ -6,16 +6,17 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/23 17:15:35 by sliziard          #+#    #+#             */
-/*   Updated: 2026/02/23 18:24:26 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/02/23 18:35:53 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "RPN.hpp"
+
 #include <cctype>
-#include <cstdint>
 #include <list>
 #include <stack>
 #include <stdexcept>
+#include <stdint.h>
 
 // ============================================================================
 // Construction / Destruction

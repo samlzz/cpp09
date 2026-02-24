@@ -23,23 +23,6 @@
 
 
 // ============================================================================
-// Utils
-// ============================================================================
-
-template <typename Cont>
-void	printSequence(const Cont &container, const std::string &label = "")
-{
-	std::cout << label;
-	for (typename Cont::size_type i = 0; i < container.size(); ++i)
-	{
-		std::cout << '[' << i << "]: " << container[i];
-		if (i < container.size() - 1)
-			std::cout << ", ";
-	}
-	std::cout << std::endl;
-}
-
-// ============================================================================
 // Declarations
 // ============================================================================
 
@@ -49,7 +32,7 @@ template<
 	typename Alloc,
 	typename Compare
 >
-Cont<T, Alloc>	fordJohnsonSort(Cont<T, Alloc> seq);
+Cont<T, Alloc>	fordJohnsonSort(const Cont<T, Alloc> &seq);
 
 // ============================================================================
 // 1- Make Pairs
@@ -197,7 +180,7 @@ template<
 	typename Alloc,
 	typename Compare
 >
-Cont<T, Alloc>	fordJohnsonSort(Cont<T, Alloc> seq)
+Cont<T, Alloc>	fordJohnsonSort(const Cont<T, Alloc> &seq)
 {
 	PairsResult<Cont, T>	r = makePairs<Cont, T, Alloc, Compare>(seq);
 	sortPairsOnBig<
@@ -218,7 +201,7 @@ template<
 	template<class, class> class Cont,
 	typename T
 >
-Cont<T, std::allocator<T> > fordJohnsonSort(Cont<T, std::allocator<T> > seq)
+Cont<T, std::allocator<T> > fordJohnsonSort(const Cont<T, std::allocator<T> > &seq)
 {
 	return fordJohnsonSort<
 		Cont,

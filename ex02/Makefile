@@ -100,6 +100,8 @@ ifeq ($(VERBOSE),true)
 	P :=
 endif
 
+export TESTS     ?= 30
+
 # =============================================================================
 # >> RULES
 # =============================================================================
@@ -146,7 +148,7 @@ re: fclean all
 .PHONY: run
 run: $(OUT)
 ifneq ($(suffix $(NAME)), .a)
-	$(OUT)
+	$(OUT) `shuf -i 1-1000 -n $(TESTS) | tr '\n' ' '`
 else
 	@echo "Nothing to run for a static library: $(OUT)"
 endif

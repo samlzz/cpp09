@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 14:47:48 by sliziard          #+#    #+#             */
-/*   Updated: 2026/02/24 15:46:43 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/02/24 16:13:48 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 # define __PMERGEME_HPP__
 
 # include <algorithm>
+# include <ctime>
 # include <functional>
-# include <iostream>
 # include <memory>
-# include <string>
 # include <utility>
 # include <stdint.h>
 
@@ -33,6 +32,8 @@ template<
 	typename Compare
 >
 Cont<T, Alloc>	fordJohnsonSort(const Cont<T, Alloc> &seq);
+
+uint32_t		parsePositiveInt(const char* s);
 
 // ============================================================================
 // 1- Make Pairs
@@ -209,6 +210,25 @@ Cont<T, std::allocator<T> > fordJohnsonSort(const Cont<T, std::allocator<T> > &s
 		std::allocator<T>,
 		std::less<T>
 	>(seq);
+}
+
+// ============================================================================
+// Time utils
+// ============================================================================
+
+template<
+	template<class, class> class Cont,
+	typename T
+>
+double	timedFJSort(
+			const Cont<T, std::allocator<T> > &src,
+			Cont<T, std::allocator<T> > &dest)
+{
+	std::clock_t	start = std::clock();
+	dest = fordJohnsonSort<Cont, T>(src);
+	std::clock_t	end = std::clock();
+
+	return static_cast<double>(end - start) / CLOCKS_PER_SEC * 1e6;
 }
 
 #endif /* __PMERGEME_HPP__ */

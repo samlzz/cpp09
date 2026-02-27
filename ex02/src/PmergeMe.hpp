@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/24 14:47:48 by sliziard          #+#    #+#             */
-/*   Updated: 2026/02/24 16:13:48 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/02/27 19:37:23 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ template<
 	typename Compare
 >
 Cont<T, Alloc>	fordJohnsonSort(const Cont<T, Alloc> &seq);
-
-uint32_t		parsePositiveInt(const char* s);
 
 // ============================================================================
 // 1- Make Pairs

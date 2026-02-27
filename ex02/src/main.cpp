@@ -1,6 +1,7 @@
 #include "PmergeMe.hpp"
 
 #include <iostream>
+#include <limits>
 #include <vector>
 #include <deque>
 #include <ctime>
@@ -10,6 +11,26 @@
 // Helpers
 // ============================================================================
 
+// ---- Parsing ----
+
+static uint32_t	_parsePositiveInt(const char* s)
+{
+	if (!s || !*s)
+		throw std::runtime_error("empty or null input");
+
+	for (size_t i = 0; s[i]; ++i)
+	{
+		if (!std::isdigit(static_cast<uint8_t>(s[i])))
+			throw std::runtime_error("invalid character in input");
+	}
+
+	long value = std::strtol(s, NULL, 10);
+	if (value < 0 || value > std::numeric_limits<uint32_t>::max())
+		throw std::runtime_error("value out of range");
+
+	return static_cast<uint32_t>(value);
+}
+
 static inline void	_parseArgs(
 						int ac, char **av,
 						std::vector<uint32_t> &vec,
@@ -18,11 +39,13 @@ static inline void	_parseArgs(
 {
 	for (int32_t i = 1; i < ac; ++i)
 	{
-		uint32_t value = parsePositiveInt(av[i]);
+		uint32_t value = _parsePositiveInt(av[i]);
 		vec.push_back(value);
 		deq.push_back(value);
 	}
 }
+
+// ---- Printing ----
 
 static void	_printVec(const std::string &label, const std::vector<uint32_t> &vec)
 {

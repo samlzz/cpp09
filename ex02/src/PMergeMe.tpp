@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/01 13:43:33 by sliziard          #+#    #+#             */
-/*   Updated: 2026/03/03 14:09:52 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/03/03 14:09:58 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <cassert>
 # include <cstddef>
 # include <functional>
+# include <iostream>
 # include <iterator>
 
 # ifndef __PMERGEME_HPP__

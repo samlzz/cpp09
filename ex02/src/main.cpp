@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/01 14:27:25 by sliziard          #+#    #+#             */
-/*   Updated: 2026/03/01 16:13:21 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/03/01 19:36:39 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,13 @@ static inline void	_parseArgs(
 
 // ---- Printing ----
 
-static void	_printVec(const std::string &label, const std::vector<uint32_t> &vec)
+template<typename Sequence>
+static void	_printSeq(const std::string &label, const Sequence &seq)
 {
 	std::cout << label;
 
-	for (size_t i = 0; i < vec.size(); ++i)
-		std::cout << " " << vec[i];
+	for (size_t i = 0; i < seq.size(); ++i)
+		std::cout << " " << seq[i];
 
 	std::cout << std::endl;
 }
@@ -80,6 +81,27 @@ static void	_printTime(const std::string &name, size_t elemCount, double elapsed
 				<< elapsed << " us" << std::endl;
 }
 
+#ifdef STRICT_SUBJECT_OUTPUT
+
+static inline void	_printErr(const std::string &)
+{
+	std::cerr << "Error" << std::endl;
+}
+#else
+
+static inline void	_printErr(const std::string &msg)
+{
+	std::cerr << "Error: " << msg << std::endl;
+}
+
+template<typename Sequence>
+static void	_printSorted(const std::string &label, const Sequence &seq)
+{
+	std::cout << label << " is "
+			<< (isSorted(seq) ? "sorted" : "not sorted") << std::endl;
+}
+#endif
+
 // ============================================================================
 // Main function
 // ============================================================================
@@ -88,7 +110,9 @@ int main(int argc, char **argv)
 {
 	if (argc < 2)
 	{
-		std::cerr << "Error" << std::endl;
+		_printErr(
+			std::string("usage: ") + argv[0] + " <positive integers...>"
+		);
 		return 1;
 	}
 
@@ -98,7 +122,7 @@ int main(int argc, char **argv)
 		std::deque<uint32_t>	deq;
 
 		_parseArgs(argc, argv, vec, deq);
-		_printVec("Before:", vec);
+		_printSeq("Before:", vec);
 
 		std::vector<uint32_t>	sortedVec;
 		double					timeVec = timedFJSort(vec, sortedVec);
@@ -106,13 +130,18 @@ int main(int argc, char **argv)
 		std::deque<uint32_t>	sortedDeq;
 		double					timeDeq = timedFJSort(deq, sortedDeq);
 
-		_printVec("After: ", sortedVec);
+		_printSeq("After: ", sortedVec);
 		_printTime("std::vector", vec.size(), timeVec);
 		_printTime("std::deque ", deq.size(), timeDeq);
+
+#ifndef STRICT_SUBJECT_OUTPUT
+		_printSorted("std::vector", sortedVec);
+		_printSorted("std::deque", sortedDeq);
+#endif
 	}
-	catch (const std::exception&)
+	catch (const std::exception &e)
 	{
-		std::cerr << "Error" << std::endl;
+		_printErr(e.what());
 		return 1;
 	}
 

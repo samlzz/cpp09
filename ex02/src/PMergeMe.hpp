@@ -165,4 +165,28 @@ double	timedFJSort(
 	return static_cast<double>(end - start) / CLOCKS_PER_SEC * 1e6;
 }
 
+// ---- Check sorting ----
+template <typename Iterator>
+bool	isSorted(Iterator first, Iterator last)
+{
+	if (std::distance(first, last) <= 1)
+		return true;
+	
+	Iterator next = first + 1;
+	while (next != last)
+	{
+		if (*next < *first)
+			return false;
+		++first;
+		++next;
+	}
+	return true;
+}
+
+template <typename Sequence>
+bool	isSorted(const Sequence &seq)
+{
+	return isSorted(seq.begin(), seq.end());
+}
+
 #endif /* __PMERGEME_HPP__ */

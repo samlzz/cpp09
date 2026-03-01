@@ -1,5 +1,18 @@
-#include "PmergeMe.hpp"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.cpp                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/01 14:27:25 by sliziard          #+#    #+#             */
+/*   Updated: 2026/03/01 16:13:21 by sliziard         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "PMergeMe.hpp"
+
+#include <cstdlib>
 #include <iostream>
 #include <limits>
 #include <vector>
@@ -37,11 +50,13 @@ static inline void	_parseArgs(
 						std::deque<uint32_t> &deq
 )
 {
+	vec.resize(ac - 1);
+	deq.resize(ac - 1);
 	for (int32_t i = 1; i < ac; ++i)
 	{
 		uint32_t value = _parsePositiveInt(av[i]);
-		vec.push_back(value);
-		deq.push_back(value);
+		vec[i - 1] = value;
+		deq[i - 1] = value;
 	}
 }
 

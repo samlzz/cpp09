@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/01 13:43:33 by sliziard          #+#    #+#             */
-/*   Updated: 2026/03/03 14:09:33 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/03/03 14:09:52 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,19 @@ Cont<T, std::allocator<T> >	fordJohnsonSort(
 								const Cont<T, std::allocator<T> > &seq
 							)
 {
-	return fordJohnsonSort<
+	size_t comparisonCount = 0;
+	CountingCompare<T, std::less<T> >
+		countingComp(std::less<T>(), comparisonCount);
+
+	Cont<T, std::allocator<T> >	res = fordJohnsonSort<
 		Cont,
 		T,
 		std::allocator<T>,
-		std::less<T>
-	>(seq);
+										CountingCompare<T, std::less<T> >
+									>(seq, countingComp);
+	
+	std::cout << "Comparisons: " << comparisonCount << std::endl;
+	return res;
 }
 
 // ============================================================================

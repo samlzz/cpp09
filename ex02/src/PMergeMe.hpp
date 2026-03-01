@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/28 19:36:33 by sliziard          #+#    #+#             */
-/*   Updated: 2026/03/03 14:09:40 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/03/03 14:09:44 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,14 +131,6 @@ Iterator	binarySearch(
 						const Compare &comp
 					);
 
-template<typename Iterator, typename T, typename Compare>
-Iterator	binarySearch(
-						Iterator first,
-						Iterator last,
-						const T& value,
-						Compare comp
-					);
-
 template<
 	template<class, class> class Cont,
 	typename T,
@@ -156,14 +148,6 @@ void	insertPendsChain(
 		);
 
 size_t	jacobsthal(size_t n);
-
-// ============================================================================
-// Functions implementations
-// ============================================================================
-
-# ifndef __PMERGEME_TPP__
-#  include "PMergeMe.tpp"
-# endif
 
 // ============================================================================
 // Helpers
@@ -207,5 +191,31 @@ bool	isSorted(const Sequence &seq)
 {
 	return isSorted(seq.begin(), seq.end());
 }
+
+// ---- Comparaison count ----
+
+template<typename T, typename Compare>
+struct CountingCompare
+{
+	CountingCompare(const Compare& c, size_t& counter)
+		: comp(c), count(counter) {}
+
+	bool operator()(const T& a, const T& b) const
+	{
+		++count;
+		return comp(a, b);
+	}
+
+	Compare	comp;
+	size_t	&count;
+};
+
+// ============================================================================
+// Functions implementations
+// ============================================================================
+
+# ifndef __PMERGEME_TPP__
+#  include "PMergeMe.tpp"
+# endif
 
 #endif /* __PMERGEME_HPP__ */

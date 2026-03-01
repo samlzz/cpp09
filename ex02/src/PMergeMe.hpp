@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/28 19:36:33 by sliziard          #+#    #+#             */
-/*   Updated: 2026/03/01 16:18:09 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/03/01 21:46:13 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ static bool		cmp_thunk(const T &a, const T &b, const void *ctx)
 	return (*static_cast<const Compare*>(ctx))(a, b);
 }
 
+typedef std::allocator<size_t>	t_idxalloc;
+
 template<
 	template<class, class> class Cont,
 	typename T,
@@ -112,14 +114,13 @@ template<
 >
 Cont<T, Alloc>	createMainChain(
 	const PairsResult<Cont, T> &r,
+	Cont<size_t, t_idxalloc> &sortedIdx,
 	const Compare &comp
 );
 
 // ============================================================================
 // Insertion
 // ============================================================================
-
-typedef std::allocator<size_t>	t_idxalloc;
 
 template<
 	template<class, class> class Cont,
@@ -133,6 +134,7 @@ void	insertPendsChain(
 				std::pair<T, T>,
 				std::allocator<std::pair<T, T> >
 			> &pairs,
+			const Cont<size_t, t_idxalloc> &sortedIdx,
 			const Compare &comp
 		);
 

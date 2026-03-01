@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/01 13:43:33 by sliziard          #+#    #+#             */
-/*   Updated: 2026/03/01 16:13:49 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/03/01 22:03:40 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 # define __PMERGEME_TPP__
 
 # include <algorithm>
-#include <cassert>
+# include <cassert>
 # include <cstddef>
 # include <functional>
+# include <iterator>
 
 # ifndef __PMERGEME_HPP__
 #  error __FILE__ " sould only be included from PMergeMe.hpp"
@@ -48,11 +49,12 @@ Cont<T, Alloc>	fordJohnsonSort(const Cont<T, Alloc> &seq, const Compare &comp)
 	PairsResult<Cont, T>		r(
 		makePairs<Cont, T, Alloc, Compare>(seq, comp)
 	);
+	Cont<size_t, t_idxalloc>	sortedIdx;
 	Cont<T, Alloc>				main(
-		createMainChain<Cont, T, Alloc, Compare>(r, comp)
+		createMainChain<Cont, T, Alloc, Compare>(r, sortedIdx, comp)
 	);
 
-	insertPendsChain<Cont, T, Alloc, Compare>(main, r.pairs, comp);
+	insertPendsChain<Cont, T, Alloc, Compare>(main, r.pairs, sortedIdx, comp);
 	if (r.hasStraggler)
 	{
 		typename Cont<T, Alloc>::iterator	pos;
@@ -138,6 +140,7 @@ template<
 >
 Cont<T, Alloc>	createMainChain(
 	const PairsResult<Cont, T> &r,
+	Cont<size_t, t_idxalloc> &sortedIdx,
 	const Compare &comp
 )
 {
@@ -147,17 +150,17 @@ Cont<T, Alloc>	createMainChain(
 
 	CompareIndex<Cont, T>			idxComp(r.pairs, &cmp_thunk<T, Compare>, &comp);
 
-	index = fordJohnsonSort<
+	sortedIdx = fordJohnsonSort<
 				Cont,
 				size_t,
 				t_idxalloc,
 				CompareIndex<Cont, T>
 			>(index, idxComp);
 
-	main.resize(index.size());
-	for (size_t i = 0; i < index.size(); ++i)
+	main.resize(sortedIdx.size());
+	for (size_t i = 0; i < sortedIdx.size(); ++i)
 	{
-		main[i] = r.pairs[index[i]].second;
+		main[i] = r.pairs[sortedIdx[i]].second;
 	}
 	return main;
 }
@@ -211,27 +214,38 @@ void	insertPendsChain(
 			const Cont<
 				std::pair<T, T>, std::allocator<std::pair<T, T> >
 			> &pairs,
+			const Cont<size_t, t_idxalloc> &sortedIdx,
 			const Compare &comp
 		)
 {
 	Cont<size_t, t_idxalloc>	order(_genInsertOrder<Cont>(pairs.size()));
-	assert(order.size() == pairs.size());
+	Cont<size_t, t_idxalloc>	posOfPair;
+
+	posOfPair.resize(sortedIdx.size());
+	for (size_t i = 0; i < sortedIdx.size(); ++i)
+		posOfPair[sortedIdx[i]] = i;
 
 	for (size_t i = 0; i < order.size(); ++i)
 	{
 		size_t	pairIdx = order[i];
-		const T	&hi = pairs[pairIdx].second;
 		const T	&lo = pairs[pairIdx].first;
 
 		typedef typename Cont<T, Alloc>::iterator	t_contIt;
-		t_contIt		bigPos = std::lower_bound(
-			mainChain.begin(), mainChain.end(), hi, comp
+		size_t		bigPos = posOfPair[pairIdx];
+		t_contIt	insertPos = std::lower_bound(
+			mainChain.begin(), mainChain.begin() + bigPos, lo, comp
 		);
-		t_contIt		insertPos = std::lower_bound(
-			mainChain.begin(), bigPos, lo, comp
+		size_t		insertIdx = static_cast<size_t>(
+			std::distance(mainChain.begin(), insertPos)
 		);
 
 		mainChain.insert(insertPos, lo);
+		
+		for (size_t j = 0; j < posOfPair.size(); ++j)
+		{
+			if (posOfPair[j] >= insertIdx)
+				++posOfPair[j];
+		}
 	}
 }
 

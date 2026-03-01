@@ -13,7 +13,7 @@ OBJ_DIR   = build/
 BIN_DIR   =
 
 ### UFILES_START ###
-FILES =	PmergeMe.cpp \
+FILES =	PMergeMe.cpp \
 		main.cpp
 ### END ###
 ifeq ($(FILES),)
@@ -148,7 +148,7 @@ re: fclean all
 .PHONY: run
 run: $(OUT)
 ifneq ($(suffix $(NAME)), .a)
-	$(OUT) `shuf -i 1-1000 -n $(TESTS) | tr '\n' ' '`
+	$(OUT) `shuf -i 1-3000 -n $(TESTS) | tr '\n' ' '`
 else
 	@echo "Nothing to run for a static library: $(OUT)"
 endif

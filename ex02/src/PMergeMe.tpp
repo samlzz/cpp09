@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/01 13:43:33 by sliziard          #+#    #+#             */
-/*   Updated: 2026/03/03 13:57:28 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/03/03 14:06:37 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ Cont<T, Alloc>	fordJohnsonSort(const Cont<T, Alloc> &seq, const Compare &comp)
 	if (r.hasStraggler)
 	{
 		typename Cont<T, Alloc>::iterator	pos;
-		pos = std::lower_bound(main.begin(), main.end(), r.straggler, comp);
+		pos = binarySearch(main.begin(), main.end(), r.straggler, comp);
 		main.insert(pos, r.straggler);
 	}
 	return main;
@@ -201,6 +201,25 @@ static Cont<size_t, t_idxalloc >	_genInsertOrder(size_t m)
 	return order;
 }
 
+template<typename Iterator, typename T, typename Compare>
+Iterator	binarySearch(
+	Iterator first, Iterator last,
+	const T& value,
+	Compare comp
+)
+{
+	while (first < last)
+	{
+		Iterator mid = first + (last - first) / 2;
+
+		if (comp(*mid, value))
+			first = mid + 1;
+		else
+			last = mid;
+	}
+	return first;
+}
+
 template<
 	template<class, class> class Cont,
 	typename T,
@@ -227,10 +246,10 @@ void	insertPendsChain(
 	{
 		size_t	pairIdx = sortedIdx[order[i] + 1];
 		const T	&lo = pairs[pairIdx].first;
+		size_t	bigPos = posOfPair[pairIdx];
 
 		typedef typename Cont<T, Alloc>::iterator	t_contIt;
-		size_t		bigPos = posOfPair[pairIdx];
-		t_contIt	insertPos = std::lower_bound(
+		t_contIt	insertPos = binarySearch(
 			mainChain.begin(), mainChain.begin() + bigPos - 1, lo, comp
 		);
 		size_t		insertIdx = static_cast<size_t>(

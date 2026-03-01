@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/28 19:36:33 by sliziard          #+#    #+#             */
-/*   Updated: 2026/03/01 21:46:13 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/03/01 22:07:13 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <cstddef>
 # include <ctime>
+#include <iterator>
 # include <memory>
 # include <stdint.h>
 
@@ -121,6 +122,14 @@ Cont<T, Alloc>	createMainChain(
 // ============================================================================
 // Insertion
 // ============================================================================
+
+template<typename Iterator, typename T, typename Compare>
+Iterator	binarySearch(
+						Iterator first,
+						Iterator last,
+						const T& value,
+						Compare comp
+					);
 
 template<
 	template<class, class> class Cont,

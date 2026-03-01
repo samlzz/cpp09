@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/28 19:36:33 by sliziard          #+#    #+#             */
-/*   Updated: 2026/03/01 22:07:13 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/03/01 22:09:25 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <cstddef>
 # include <ctime>
-#include <iterator>
+# include <iterator>
 # include <memory>
 # include <stdint.h>
 
@@ -128,7 +128,7 @@ Iterator	binarySearch(
 						Iterator first,
 						Iterator last,
 						const T& value,
-						Compare comp
+						const Compare &comp
 					);
 
 template<

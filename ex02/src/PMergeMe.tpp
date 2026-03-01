@@ -6,14 +6,13 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/01 13:43:33 by sliziard          #+#    #+#             */
-/*   Updated: 2026/03/03 14:06:37 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/03/03 14:07:01 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef __PMERGEME_TPP__
 # define __PMERGEME_TPP__
 
-# include <algorithm>
 # include <cassert>
 # include <cstddef>
 # include <functional>
@@ -205,7 +204,7 @@ template<typename Iterator, typename T, typename Compare>
 Iterator	binarySearch(
 	Iterator first, Iterator last,
 	const T& value,
-	Compare comp
+	const Compare &comp
 )
 {
 	while (first < last)

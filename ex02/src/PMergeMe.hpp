@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/28 19:36:33 by sliziard          #+#    #+#             */
-/*   Updated: 2026/03/03 14:09:21 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/03/03 14:09:40 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,14 @@ Iterator	binarySearch(
 						Iterator last,
 						const T& value,
 						const Compare &comp
+					);
+
+template<typename Iterator, typename T, typename Compare>
+Iterator	binarySearch(
+						Iterator first,
+						Iterator last,
+						const T& value,
+						Compare comp
 					);
 
 template<

@@ -76,7 +76,7 @@ Cont<T, std::allocator<T> >	fordJohnsonSort(
 										CountingCompare<T, std::less<T> >
 									>(seq, countingComp);
 	
-	std::cout << "Comparisons: " << comparisonCount << std::endl;
+	std::cout << "Comparaisons: " << comparisonCount << std::endl;
 	return res;
 }
 

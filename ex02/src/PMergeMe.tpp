@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/01 13:43:33 by sliziard          #+#    #+#             */
-/*   Updated: 2026/03/01 22:03:40 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/03/03 13:57:28 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,18 +142,19 @@ Cont<T, Alloc>	createMainChain(
 	Cont<T, Alloc>					main;
 
 	CompareIndex<Cont, T>			idxComp(r.pairs, &cmp_thunk<T, Compare>, &comp);
-
+	
 	sortedIdx = fordJohnsonSort<
 				Cont,
 				size_t,
 				t_idxalloc,
 				CompareIndex<Cont, T>
 			>(index, idxComp);
+	main.resize(sortedIdx.size() + 1);
 
-	main.resize(sortedIdx.size());
+	main[0] = r.pairs[sortedIdx[0]].first;
 	for (size_t i = 0; i < sortedIdx.size(); ++i)
 	{
-		main[i] = r.pairs[sortedIdx[i]].second;
+		main[i + 1] = r.pairs[sortedIdx[i]].second;
 	}
 	return main;
 }
@@ -215,22 +216,22 @@ void	insertPendsChain(
 			const Compare &comp
 		)
 {
-	Cont<size_t, t_idxalloc>	order(_genInsertOrder<Cont>(pairs.size()));
+	Cont<size_t, t_idxalloc>	order(_genInsertOrder<Cont>(pairs.size() - 1));
 	Cont<size_t, t_idxalloc>	posOfPair;
 
 	posOfPair.resize(sortedIdx.size());
 	for (size_t i = 0; i < sortedIdx.size(); ++i)
-		posOfPair[sortedIdx[i]] = i;
+		posOfPair[sortedIdx[i]] = i + 1;
 
 	for (size_t i = 0; i < order.size(); ++i)
 	{
-		size_t	pairIdx = order[i];
+		size_t	pairIdx = sortedIdx[order[i] + 1];
 		const T	&lo = pairs[pairIdx].first;
 
 		typedef typename Cont<T, Alloc>::iterator	t_contIt;
 		size_t		bigPos = posOfPair[pairIdx];
 		t_contIt	insertPos = std::lower_bound(
-			mainChain.begin(), mainChain.begin() + bigPos, lo, comp
+			mainChain.begin(), mainChain.begin() + bigPos - 1, lo, comp
 		);
 		size_t		insertIdx = static_cast<size_t>(
 			std::distance(mainChain.begin(), insertPos)

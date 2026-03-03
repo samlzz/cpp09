@@ -177,29 +177,33 @@ static Cont<size_t, t_idxalloc >	_genInsertOrder(size_t m)
 	if (m == 0)
 		return order;
 
-	Cont<size_t, t_idxalloc>	t;
-	t.push_back(1);
-
-	size_t	k = 2;
+	Cont<size_t, t_idxalloc>	jacob;
+	size_t	k = 3;
 	while (true)
 	{
-		size_t tk = (1ULL << k) - jacobsthal(k);
-		if (tk > m)
+		size_t j = jacobsthal(k);
+		if (j > m)
 			break;
-		t.push_back(tk);
+		jacob.push_back(j);
 		++k;
 	}
 
 	size_t	prev = 0;
-	for (size_t i = 0; i < t.size(); ++i)
+	for (size_t i = 0; i < jacob.size(); ++i)
 	{
-		size_t	upper = std::min(t[i], m);
-		for (size_t j = upper; j > prev; --j)
-			order.push_back(j - 1);
+		size_t	upper = jacob[i];
+		for (size_t x = upper; x > prev; --x)
+			order.push_back(x - 1);
 		prev = upper;
 	}
-	for (size_t j = m; j > prev; --j)
-		order.push_back(j - 1);
+	for (size_t x = m; x > prev; --x)
+		order.push_back(x - 1);
+
+	// std::cout << "Insert order: ";
+	// for (size_t i = 0; i < order.size(); ++i)
+	// 	std::cout << order[i] << " ";
+	// std::cout << std::endl;
+	
 	return order;
 }
 

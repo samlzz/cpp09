@@ -38,13 +38,6 @@ Cont<T, Alloc>	fordJohnsonSort(const Cont<T, Alloc> &seq, const Compare &comp)
 {
 	if (seq.size() <= 1)
 		return seq;
-	if (seq.size() == 2)
-	{
-		Cont<T, Alloc>	cpy(seq);
-		if (comp(cpy[1], cpy[0]))
-			std::swap(cpy[1], cpy[0]);
-		return cpy;
-	}
 
 	PairsResult<Cont, T>		r(
 		makePairs<Cont, T, Alloc, Compare>(seq, comp)

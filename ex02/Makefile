@@ -30,7 +30,7 @@ CC        = cc
 CFLAGS    = -Wall -Wextra -Werror
 
 CXX       = c++
-CXXFLAGS  = -Wall -Wextra -Werror -std=c++98 -DSTRICT_SUBJECT_OUTPUT
+CXXFLAGS  = -Wall -Wextra -Werror -std=c++98 # -DSTRICT_SUBJECT_OUTPUT
 
 INCL_DIRS =
 # ? Directories & Libraries to link against

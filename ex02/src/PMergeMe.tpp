@@ -6,7 +6,7 @@
 /*   By: sliziard <sliziard@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/03/01 13:43:33 by sliziard          #+#    #+#             */
-/*   Updated: 2026/03/03 14:09:58 by sliziard         ###   ########.fr       */
+/*   Updated: 2026/03/03 14:12:29 by sliziard         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,25 @@ Cont<T, Alloc>	fordJohnsonSort(const Cont<T, Alloc> &seq, const Compare &comp)
 	return main;
 }
 
+# ifdef STRICT_SUBJECT_OUTPUT
+
+template<
+	template<class, class> class Cont,
+	typename T
+>
+Cont<T, std::allocator<T> >	fordJohnsonSort(
+								const Cont<T, std::allocator<T> > &seq
+							)
+{
+	return fordJohnsonSort<
+		Cont,
+		T,
+		std::allocator<T>,
+		std::less<T>
+	>(seq);
+}
+# else
+
 template<
 	template<class, class> class Cont,
 	typename T
@@ -79,6 +98,7 @@ Cont<T, std::allocator<T> >	fordJohnsonSort(
 	std::cout << "Comparaisons: " << comparisonCount << std::endl;
 	return res;
 }
+# endif
 
 // ============================================================================
 // Pairing
